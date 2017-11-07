@@ -24,9 +24,10 @@ def zabbix_login(zabbix_ip, zabbix_user, zabbix_password):
 def zabbix_GetGroup(zabbix_groups):
     #zabbix_data=json.loads(zabbix_groups)
     #print len(zabbix_groups)
+    AnsibleGroup = "AnsibleManaged"
     count = 0
     while count < len(zabbix_groups):
-        if zabbix_groups[count]['name'] != "AnsibleManaged":
+        if zabbix_groups[count]['name'] != AnsibleGroup:
             zabbix_group = zabbix_groups[count]['name']
         count +=1
 
