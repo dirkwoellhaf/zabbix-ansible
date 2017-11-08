@@ -5,12 +5,14 @@ The script will pull all hosts assigned to a Host-Group (=ZABBIX_ANSIBLE_GRP) an
 
 Example:
 Host In Zabbix:
+
   Host-1:
-    - AnsibleManaged (=ZABBIX_ANSIBLE_GRP)
-    - DNS-Servers
-    - NTP-Servers
+      - AnsibleManaged (=ZABBIX_ANSIBLE_GRP)
+      - DNS-Servers
+      - NTP-Servers
 
 Results in Ansible Hosts:
+
   [DNS-Server]
   Host-1
 
