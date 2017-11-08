@@ -106,6 +106,8 @@ if __name__ == '__main__':
     zabbix_user = os.environ['ZABBIX_USER']
     zabbix_password = os.environ['ZABBIX_PASSWORD']
     zabbix_ansible_grp = os.environ['ZABBIX_ANSIBLE_GRP']
+    zabbix_update_rate = os.environ['UPDATE_RATE']
+
 
     print ""
     print "Version: "+ScriptVersion
@@ -113,10 +115,19 @@ if __name__ == '__main__':
     print "ZABBIX USER: "+zabbix_user
     print "ANSIBLE-GRP: "+zabbix_ansible_grp
 
-    Config = configparser.SafeConfigParser(allow_no_value=True)
-    zabbix_auth = zabbix_login(zabbix_ip, zabbix_user, zabbix_password)
-    zabbix_groups,zabbix_hosts = zabbix_GetHosts(zabbix_ip, zabbix_auth, zabbix_ansible_grp)
-    Config = CreateConfigFile(Config, zabbix_groups,zabbix_hosts)
+    run=0
 
-    with open('/mnt/zabbix-ansible/'+'hosts', 'wb') as configfile:
-        Config.write(configfile)
+    while run is 0:
+        Config = configparser.SafeConfigParser(allow_no_value=True)
+        zabbix_auth = zabbix_login(zabbix_ip, zabbix_user, zabbix_password)
+        zabbix_groups,zabbix_hosts = zabbix_GetHosts(zabbix_ip, zabbix_auth, zabbix_ansible_grp)
+        Config = CreateConfigFile(Config, zabbix_groups,zabbix_hosts)
+
+        with open('/mnt/zabbix-ansible/'+'hosts', 'wb') as configfile:
+            Config.write(configfile)
+
+        if zabbix_update_rate == "0":
+            run += 1
+        else:
+            print "Sleeping for "+zabbix_update_rate+"sec"
+            time.sleep(int(zabbix_update_rate))

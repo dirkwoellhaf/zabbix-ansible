@@ -9,5 +9,22 @@ docker run -it \
 -e ZABBIX_USER='<Your username>' \
 -e ZABBIX_PASSWORD='<Your password>' \
 -e ZABBIX_ANSIBLE_GRP='<Host-Group to be checked>' \
+-e UPDATE_RATE="60" \
 dirkwoellhaf/zabbix-ansible:v0.9 \
 python /coding/zabbix-ansible/import.py
+
+
+docker service create \
+  --name ZabbixAnsible \
+  --replicas 2 \
+  --restart-condition any \
+  --restart-max-attempts 50 \
+  --restart-delay 60s \
+  --mount type=bind,src=/mnt/server/infra/ansible,dst=/mnt/zabbix-ansible \
+  -e ZABBIX_IP="10.0.0.94" \
+  -e ZABBIX_USER="dirk" \
+  -e ZABBIX_PASSWORD='$cisco12' \
+  -e ZABBIX_ANSIBLE_GRP='AnsibleManaged' \
+  -e UPDATE_RATE="60" \
+  dirkwoellhaf/zabbix-ansible:v0.9 \
+  python /coding/zabbix-ansible/import.py
